@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+venv/
+# bus runtime state - never commit a live message database
+bus.db*
+*.sqlite3
+waiters/
+*.fifo
+*.log
+.DS_Store
