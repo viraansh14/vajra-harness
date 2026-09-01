@@ -100,9 +100,15 @@ Refusing is louder than succeeding into a void.
 
 ```bash
 python bus/install_bus.py            # installs the bus into ~/.claude/claudebus
+cd bus && python -m pytest -q        # 14 tests
 cd memory && pip install -e .        # installs the memory-sync CLI
 python -m pytest -q                  # 55 tests
 ```
+
+The bus tests run against a throwaway `CLAUDEBUS_HOME`. That isolation is not
+politeness: the bus auto-discovers a database under `~/.claude/claudebus`, so a
+test that forgot to set it would read and write a real message history and pass
+while corrupting it.
 
 Python 3.12+. The bus needs nothing but the standard library. The sync needs `pyyaml` and
 invokes `git` as a subprocess rather than through a binding.
