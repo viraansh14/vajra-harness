@@ -127,9 +127,10 @@ latency bounded by a one second interval instead of microseconds. Everything els
 ## Layout
 
 ```
-bus/       coordination bus, session hooks, installer, cross-harness worker
-memory/    memory sync package, tests, and the scheduled reconciler scripts
-docs/      design notes
+bus/           claudebus.py, session hooks, installer, cross-harness worker
+bus/tests/     behavioural suite for the bus
+memory/        memory sync package and the scheduled reconciler scripts
+memory/tests/  suite for the sync
 ```
 
 ## License
