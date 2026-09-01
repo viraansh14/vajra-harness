@@ -1,5 +1,5 @@
 from pathlib import Path
-from memory_sync.migrate import migrate_text, migrate_dir
+from vajra_harness.memory.migrate import migrate_text, migrate_dir
 
 SHARED = "---\nname: a\nmetadata:\n  sync_scope: shared\n---\n\nbody\n"
 PLAIN = "---\nname: b\nmetadata:\n  type: project\n---\n\nbody\n"

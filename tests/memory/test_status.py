@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
-from memory_sync.status import completeness, verdict, write_status
-from memory_sync.index import collect
+from vajra_harness.memory.status import completeness, verdict, write_status
+from vajra_harness.memory.index import collect
 
 
 def _mem(name, scope):

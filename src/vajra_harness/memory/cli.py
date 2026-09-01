@@ -17,7 +17,7 @@ REPOS = ("_shared", "_local")
 
 
 def _args(argv):
-    p = argparse.ArgumentParser(prog="memory-sync")
+    p = argparse.ArgumentParser(prog="vajra-memory")
     p.add_argument("cmd", choices=COMMANDS)
     p.add_argument("--root", required=True)
     p.add_argument("--machine", required=True, choices=["winpc", "macmini"])
@@ -60,7 +60,7 @@ def _regenerate(root, machine, status_file, extra_checks=None):
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv or argv[0] not in COMMANDS:
-        print("usage: memory-sync {index|lint|migrate|sync} --root R --machine M")
+        print("usage: vajra-memory {index|lint|migrate|sync} --root R --machine M")
         return 2
     a = _args(argv)
     root = Path(a.root)

@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 import pytest
-from memory_sync.transport import run, commit_all, push_with_retry, pull_rebase
+from vajra_harness.memory.transport import run, commit_all, push_with_retry, pull_rebase
 
 
 def _repo(path, name):
@@ -82,7 +82,7 @@ def test_sync_repo_falls_back_to_the_second_remote(tmp_path):
     """mDNS resolution for the peer is intermittently flaky on this LAN, so a
     single-remote transport fails for reasons that have nothing to do with the
     memory. Try candidates in order and report which one carried it."""
-    from memory_sync.transport import sync_repo
+    from vajra_harness.memory.transport import sync_repo
     a, b = _linked(tmp_path)
     subprocess.run(["git", "remote", "rename", "peer", "good"], cwd=a, check=True)
     subprocess.run(["git", "remote", "add", "dead", "ssh://nosuch.invalid/x"], cwd=a, check=True)
@@ -95,7 +95,7 @@ def test_sync_repo_falls_back_to_the_second_remote(tmp_path):
 
 
 def test_sync_repo_reports_unknown_when_every_remote_is_unreachable(tmp_path):
-    from memory_sync.transport import sync_repo
+    from vajra_harness.memory.transport import sync_repo
     a = _repo(tmp_path / "a", "a")
     subprocess.run(["git", "remote", "add", "dead", "ssh://nosuch.invalid/x"], cwd=a, check=True)
     res = sync_repo(a, ["dead", "alsodead"], "main")
@@ -108,7 +108,7 @@ def test_repo_state_flags_an_interrupted_rebase(tmp_path):
     which every later sync fails for a reason that looks like a network fault.
     Observed live 2026-09-01. It must be reported explicitly, not rediscovered
     by hand."""
-    from memory_sync.transport import repo_state
+    from vajra_harness.memory.transport import repo_state
     a = _repo(tmp_path / "a", "a")
     ok = repo_state(a)
     assert ok["state"] == "PASS", ok
@@ -119,7 +119,7 @@ def test_repo_state_flags_an_interrupted_rebase(tmp_path):
 
 
 def test_repo_state_flags_detached_head(tmp_path):
-    from memory_sync.transport import repo_state
+    from vajra_harness.memory.transport import repo_state
     a = _repo(tmp_path / "a", "a")
     sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=a,
                          capture_output=True, text=True).stdout.strip()
@@ -130,7 +130,7 @@ def test_repo_state_flags_detached_head(tmp_path):
 
 
 def test_sync_repo_refuses_to_run_on_a_broken_repo(tmp_path):
-    from memory_sync.transport import sync_repo
+    from vajra_harness.memory.transport import sync_repo
     a, b = _linked(tmp_path)
     (a / ".git" / "rebase-merge").mkdir()
     res = sync_repo(a, ["peer"], "main")

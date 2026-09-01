@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vajra-harness"
+version = "0.2.0"
+description = "Coordination bus and cross-machine memory sync for running multiple AI coding agents"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Viraansh Bhanushali", email = "viraansh14@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6"]
+
+[project.urls]
+Homepage = "https://github.com/viraansh14/vajra-harness"
+
+[project.scripts]
+vajra-bus = "vajra_harness.bus.claudebus:main"
+vajra-memory = "vajra_harness.memory.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"vajra_harness.bus" = ["*.sh"]
+"vajra_harness.memory" = ["scripts/*.ps1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

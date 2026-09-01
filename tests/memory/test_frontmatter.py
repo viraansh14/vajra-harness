@@ -1,5 +1,5 @@
 import pytest
-from memory_sync.frontmatter import parse, scope_of, dump
+from vajra_harness.memory.frontmatter import parse, scope_of, dump
 
 RAW = """---
 name: capability-os

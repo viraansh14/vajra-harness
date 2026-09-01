@@ -1,5 +1,5 @@
 from pathlib import Path
-from memory_sync.index import collect, render, lint
+from vajra_harness.memory.index import collect, render, lint
 
 
 def _mem(name, scope, desc="hook text"):
@@ -58,7 +58,7 @@ def test_audit_flags_a_peer_scoped_file_sitting_in_local(tmp_path):
     does not match the machine, so a winpc-scoped memory sitting in the Mac's
     _local was invisible to it. Found live 2026-09-01 - 5 such files.
     _local must hold only THIS machine's memories."""
-    from memory_sync.index import audit
+    from vajra_harness.memory.index import audit
     t = _tree(tmp_path)
     (t / "_local" / "stray.md").write_text(_mem("stray", "winpc"), encoding="utf-8")
     problems = audit(t, "macmini")
@@ -66,7 +66,7 @@ def test_audit_flags_a_peer_scoped_file_sitting_in_local(tmp_path):
 
 
 def test_audit_flags_own_scope_sitting_in_peer_local(tmp_path):
-    from memory_sync.index import audit
+    from vajra_harness.memory.index import audit
     t = _tree(tmp_path)
     (t / "_peer-local" / "mine.md").write_text(_mem("mine", "macmini"), encoding="utf-8")
     problems = audit(t, "macmini")
@@ -74,7 +74,7 @@ def test_audit_flags_own_scope_sitting_in_peer_local(tmp_path):
 
 
 def test_audit_is_silent_on_a_correct_tree(tmp_path):
-    from memory_sync.index import audit
+    from vajra_harness.memory.index import audit
     t = tmp_path
     (t / "_shared").mkdir(); (t / "_local").mkdir(); (t / "_peer-local").mkdir()
     (t / "_shared" / "a.md").write_text(_mem("a", "estate"), encoding="utf-8")

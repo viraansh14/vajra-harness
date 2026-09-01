@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from memory_sync.cli import main
+from vajra_harness.memory.cli import main
 
 
 def _mem(name, scope):
@@ -58,14 +58,14 @@ def test_index_never_lists_peer_local(tmp_path):
 
 
 def test_module_is_runnable_as_a_script(tmp_path):
-    """Guards a real bug: without an __main__ guard, `python -m memory_sync.cli`
+    """Guards a real bug: without an __main__ guard, `python -m vajra_harness.memory.cli`
     imports the module and silently does nothing at all."""
     import subprocess, sys, pathlib
     root = pathlib.Path(__file__).resolve().parents[1]
     (tmp_path / "_shared").mkdir()
     (tmp_path / "_shared" / "a.md").write_text(
         "---\nname: a\nmetadata:\n  sync_scope: shared\n---\n\nb\n", encoding="utf-8")
-    p = subprocess.run([sys.executable, "-m", "memory_sync.cli", "migrate",
+    p = subprocess.run([sys.executable, "-m", "vajra_harness.memory.cli", "migrate",
                         "--root", str(tmp_path), "--machine", "winpc"],
                        cwd=root, capture_output=True, text=True)
     assert p.returncode == 0, p.stderr

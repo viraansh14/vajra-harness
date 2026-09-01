@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-BUS = Path(__file__).resolve().parents[1] / "claudebus.py"
+BUS = Path(__file__).resolve().parents[2] / "src" / "vajra_harness" / "bus" / "claudebus.py"
 
 
 @pytest.fixture()

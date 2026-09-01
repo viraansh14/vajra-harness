@@ -3,11 +3,11 @@
 Infrastructure for running several AI coding agents at once, across more than one machine,
 without them silently trampling each other.
 
-Two components, both dependency-free Python:
+One installable package, `vajra_harness`, with two components today and a third landing:
 
-- **`bus/`** is a local coordination bus. Agents on one machine send messages, take exclusive
+- **`bus`** is a local coordination bus. Agents on one machine send messages, take exclusive
   locks, negotiate work by auction, share state, and run a work queue through it.
-- **`memory/`** is a cross-machine memory sync. Durable facts written by an agent on one
+- **`memory`** is a cross-machine memory sync. Durable facts written by an agent on one
   machine converge onto the other, with a generated index and a status file that is allowed to
   say `DEGRADED` out loud.
 
@@ -34,11 +34,11 @@ instant push: a `send` pokes every active waiter's pipe, waking a blocked `wait`
 microseconds. There is no daemon to babysit and nothing to start at boot.
 
 ```bash
-claudebus send "refactoring the auth module" --to worker-2
-claudebus claim migrations --note "running 0007"    # exclusive lane, TTL'd
-claudebus bb set schema-version 7 --if-ver 6        # compare-and-set
-claudebus submit "run integration suite" --prio 5
-claudebus cfp "port the parser" && claudebus bids   # auction, then award
+vajra-bus send "refactoring the auth module" --to worker-2
+vajra-bus claim migrations --note "running 0007"    # exclusive lane, TTL'd
+vajra-bus bb set schema-version 7 --if-ver 6        # compare-and-set
+vajra-bus submit "run integration suite" --prio 5
+vajra-bus cfp "port the parser" && vajra-bus bids   # auction, then award
 ```
 
 Each subsystem is a named pattern rather than something improvised:
@@ -99,10 +99,8 @@ Refusing is louder than succeeding into a void.
 ## Install
 
 ```bash
-python bus/install_bus.py            # installs the bus into ~/.claude/claudebus
-cd bus && python -m pytest -q        # 14 tests
-cd memory && pip install -e .        # installs the memory-sync CLI
-python -m pytest -q                  # 55 tests
+pip install -e .        # installs both CLIs: vajra-bus and vajra-memory
+python -m pytest -q     # 69 tests (14 bus, 55 memory)
 ```
 
 The bus tests run against a throwaway `CLAUDEBUS_HOME`. That isolation is not
@@ -127,11 +125,12 @@ latency bounded by a one second interval instead of microseconds. Everything els
 ## Layout
 
 ```
-bus/           claudebus.py, session hooks, installer, cross-harness worker
-bus/tests/     behavioural suite for the bus
-memory/        memory sync package and the scheduled reconciler scripts
-memory/tests/  suite for the sync
+src/vajra_harness/bus/      coordination bus, session hooks, installer, cross-harness worker
+src/vajra_harness/memory/   memory sync and the scheduled reconciler scripts
+tests/                      69 tests across both components
 ```
+
+Two console scripts are installed: `vajra-bus` and `vajra-memory`.
 
 ## License
 
